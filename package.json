@@ -1,5 +1,5 @@
 {
-	"name": "import-modules",
+	"name": "@adoyle.me/import-modules",
 	"version": "2.0.0",
 	"description": "Import all modules in a directory",
 	"license": "MIT",

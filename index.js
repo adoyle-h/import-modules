@@ -9,6 +9,7 @@ const parentDirectory = path.dirname(parentFile || '.');
 
 // The default file extensions used by `require()`.
 const fileExtensions = new Set(['.js', '.json', '.node']);
+const ignoreFn = () => false;
 
 module.exports = (directory, options) => {
 	directory = path.resolve(parentDirectory, directory || '');
@@ -16,6 +17,7 @@ module.exports = (directory, options) => {
 	options = {
 		camelize: true,
 		fileExtensions,
+		ignore: ignoreFn,
 		...options
 	};
 
@@ -29,6 +31,8 @@ module.exports = (directory, options) => {
 	const done = new Set();
 	const returnValue = {};
 
+	const {ignore} = options;
+
 	for (const fileExtension of options.fileExtensions) {
 		for (const file of files) {
 			const filenameStem = path.basename(file).replace(/\.\w+$/, '');
@@ -38,7 +42,8 @@ module.exports = (directory, options) => {
 				fullPath === parentFile ||
 				path.extname(file) !== fileExtension ||
 				filenameStem[0] === '_' ||
-				filenameStem[0] === '.') {
+				filenameStem[0] === '.' ||
+				ignore(file, fullPath)) {
 				continue;
 			}
 
